@@ -1,5 +1,5 @@
 # ===========================================================================
-#      http://www.gnu.org/software/autoconf-arcforge/ax_boost_thread.html
+#      http://www.gnu.org/software/autoconf-archive/ax_boost_thread.html
 # ===========================================================================
 #
 # SYNOPSIS

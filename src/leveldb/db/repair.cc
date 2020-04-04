@@ -314,7 +314,7 @@ class Repairer {
     if (status.ok()) {
       tables_.push_back(t);
     } else {
-      RepairTable(fname, t);  // RepairTable arcforges input file.
+      RepairTable(fname, t);  // RepairTable archives input file.
     }
   }
 

@@ -1,5 +1,5 @@
 # ===========================================================================
-#   http://www.gnu.org/software/autoconf-arcforge/ax_check_preproc_flag.html
+#   http://www.gnu.org/software/autoconf-archive/ax_check_preproc_flag.html
 # ===========================================================================
 #
 # SYNOPSIS

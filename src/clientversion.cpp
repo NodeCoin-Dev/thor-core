@@ -41,7 +41,7 @@ const std::string CLIENT_NAME("Thor Core");
 #include <obj/build.h>
 #endif
 
-//! git will put "#define GIT_ARCFORGE 1" on the next line inside arcforges. 
+//! git will put "#define GIT_ARCFORGE 1" on the next line inside archives. 
 #define GIT_ARCFORGE 1
 #ifdef GIT_ARCFORGE
 #define GIT_COMMIT_ID "ec284d9fd"

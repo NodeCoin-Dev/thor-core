@@ -21,7 +21,7 @@ BITCOIN_CLI_NAME=thor-cli
 BITCOIN_TX_NAME=thor-tx
 
 dnl Unless the user specified ARFLAGS, force it to be cr
-AC_ARG_VAR(ARFLAGS, [Flags for the arcforger, defaults to <cr> if not set])
+AC_ARG_VAR(ARFLAGS, [Flags for the archiver, defaults to <cr> if not set])
 if test "x${ARFLAGS+set}" != "xset"; then
   ARFLAGS="cr"
 fi
@@ -375,7 +375,7 @@ case $host in
      dnl its command here, with the predeps/postdeps removed, and -static inserted. Postdeps are
      dnl also overridden to prevent their insertion later.
      dnl This should only affect dll's.
-     arcforge_cmds_CXX="\$CC -shared \$libobjs \$deplibs \$compiler_flags -static -o \$output_objdir/\$soname \${wl}--enable-auto-image-base -Xlinker --out-implib -Xlinker \$lib"
+     archive_cmds_CXX="\$CC -shared \$libobjs \$deplibs \$compiler_flags -static -o \$output_objdir/\$soname \${wl}--enable-auto-image-base -Xlinker --out-implib -Xlinker \$lib"
      postdeps_CXX=
 
      ;;

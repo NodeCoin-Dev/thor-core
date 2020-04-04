@@ -1,5 +1,5 @@
 # ===========================================================================
-#   http://www.gnu.org/software/autoconf-arcforge/ax_cxx_compile_stdcxx.html
+#   http://www.gnu.org/software/autoconf-archive/ax_cxx_compile_stdcxx.html
 # ===========================================================================
 #
 # SYNOPSIS

@@ -178,7 +178,7 @@ Low-level RPC changes
 
 ### Build system
 - #11440 `b6c0209` Fix validationinterface build on super old boost/clang (TheBlueMatt)
-- #11530 `265bb21` Add share/rpcuser to dist. source code arcforge (MarcoFalke)
+- #11530 `265bb21` Add share/rpcuser to dist. source code archive (MarcoFalke)
 
 ### GUI
 - #11334 `19d63e8` Remove custom fee radio group and remove nCustomFeeRadio setting (achow101)

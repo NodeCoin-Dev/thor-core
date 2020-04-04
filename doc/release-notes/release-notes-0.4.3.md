@@ -9,7 +9,7 @@ Please report bugs for the daemon only using the issue tracker at github:
 https://github.com/bitcoin/bitcoin/issues
 
 Stable source code is hosted at Gitorious:
-http://gitorious.org/bitcoin/bitcoind-stable/arcforge-tarball/v0.4.3#.tar.gz
+http://gitorious.org/bitcoin/bitcoind-stable/archive-tarball/v0.4.3#.tar.gz
 
 BUG FIXES
 

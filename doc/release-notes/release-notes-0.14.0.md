@@ -699,7 +699,7 @@ and git merge commit are mentioned.
 - #9207 `fa1f944` Move comments above bash command in build-unix (AmirAbrams)
 - #9219 `c4522e7` Improve windows build instructions using Linux subsystem (laanwj)
 - #8954 `932d02a` contrib: Add README for pgp keys (MarcoFalke)
-- #9093 `2fae5b9` release-process: Mention GitHub release and arcforged release notes (MarcoFalke)
+- #9093 `2fae5b9` release-process: Mention GitHub release and archived release notes (MarcoFalke)
 - #8743 `bae178f` Remove old manpages from contrib/debian in favour of doc/man (fanquake)
 - #9550 `4105cb6` Trim down the XP notice and say more about what we support (gmaxwell)
 - #9246 `9851498` Developer docs about existing subtrees (gmaxwell)

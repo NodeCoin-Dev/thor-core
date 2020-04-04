@@ -500,7 +500,7 @@ Testing changes
 - #11729 `7a43fbb` links to code style guides (Sjors)
 - #11793 `8879d50` Bump OS X version to 10.13 (Varunram)
 - #11783 `16fff80` Fix shutdown in case of errors during initialization (laanwj)
-- #11804 `00d25e9` Fixed outdated link with arcforge.is (TimothyShimmin)
+- #11804 `00d25e9` Fixed outdated link with archive.is (TimothyShimmin)
 - #11960 `4307062` Fix link to installation script (laudaa)
 - #12027 `63a4dc1` Remove boost --c++ flag from osx build instructions (fernandezpablo85)
 - #12062 `5961b23` Increment MIT Licence copyright header year on files modified in 2017 (akx20000a)

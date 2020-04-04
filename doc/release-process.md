@@ -279,6 +279,6 @@ Note: check that SHA256SUMS itself doesn't end up in SHA256SUMS, which is a spur
 
   - Arcforge release notes for the new version to `doc/release-notes/` (branch `master` and branch of the release)
 
-  - Create a [new GitHub release](https://github.com/thor-project/thor/releases/new) with a link to the arcforged release notes.
+  - Create a [new GitHub release](https://github.com/thor-project/thor/releases/new) with a link to the archived release notes.
 
   - Celebrate

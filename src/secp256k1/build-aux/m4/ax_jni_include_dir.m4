@@ -1,5 +1,5 @@
 # ===========================================================================
-#    http://www.gnu.org/software/autoconf-arcforge/ax_jni_include_dir.html
+#    http://www.gnu.org/software/autoconf-archive/ax_jni_include_dir.html
 # ===========================================================================
 #
 # SYNOPSIS

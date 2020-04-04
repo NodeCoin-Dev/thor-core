@@ -124,7 +124,7 @@ BOOST_AUTO_TEST_CASE(netbase_lookupnumeric)
 BOOST_AUTO_TEST_CASE(onioncat_test)
 {
 
-    // values from https://web.arcforge.org/web/20121122003543/http://www.cypherpunk.at/onioncat/wiki/OnionCat
+    // values from https://web.archive.org/web/20121122003543/http://www.cypherpunk.at/onioncat/wiki/OnionCat
     CNetAddr addr1(ResolveIP("5wyqrzbvrdsumnok.onion"));
     CNetAddr addr2(ResolveIP("FD87:D87E:EB43:edb1:8e4:3588:e546:35ca"));
     BOOST_CHECK(addr1 == addr2);

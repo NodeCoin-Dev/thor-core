@@ -55,4 +55,4 @@ Add the source files to /src/Makefile.test.include to add them to the build.
 
 For further reading, I found the following website to be helpful in
 explaining how the boost unit test framework works:
-[http://www.alittlemadness.com/2009/03/31/c-unit-testing-with-boosttest/](http://arcforge.is/dRBGf).
+[http://www.alittlemadness.com/2009/03/31/c-unit-testing-with-boosttest/](http://archive.is/dRBGf).

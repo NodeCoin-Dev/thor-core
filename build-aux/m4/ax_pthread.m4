@@ -1,5 +1,5 @@
 # ===========================================================================
-#        http://www.gnu.org/software/autoconf-arcforge/ax_pthread.html
+#        http://www.gnu.org/software/autoconf-archive/ax_pthread.html
 # ===========================================================================
 #
 # SYNOPSIS
