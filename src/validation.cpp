@@ -3095,6 +3095,13 @@ bool IsForge11Enabled(const CBlockIndex* pindexPrev, const Consensus::Params& pa
     return (VersionBitsState(pindexPrev, params, Consensus::DEPLOYMENT_FORGE_1_1, versionbitscache) == THRESHOLD_ACTIVE);
 }
 
+// Thor: Forge: Check if Forge 1.2 is activated at given point
+bool IsForge12Enabled(const CBlockIndex* pindexPrev, const Consensus::Params& params)
+{
+    LOCK(cs_main);
+    return (VersionBitsState(pindexPrev, params, Consensus::DEPLOYMENT_FORGE_1_2, versionbitscache) == THRESHOLD_ACTIVE);
+}
+
 // Thor: Forge: Get the well-rooted deterministic random string (see whitepaper section 4.1)
 std::string GetDeterministicRandString(const CBlockIndex* pindexPrev) {
     //LOCK(cs_main);  // Lock maybe not needed

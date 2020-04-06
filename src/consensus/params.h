@@ -23,6 +23,7 @@ enum DeploymentPos
     DEPLOYMENT_SEGWIT, // Deployment of BIP141, BIP143, and BIP147.
     DEPLOYMENT_FORGE,    // Thor: Forge: Deployment
     DEPLOYMENT_FORGE_1_1,    // Thor: Forge: 1.1 Deployment
+    DEPLOYMENT_FORGE_1_2,    // Thor: Forge: 1.1 Deployment
     // NOTE: Also add new deployments to VersionBitsDeploymentInfo in versionbits.cpp
     MAX_VERSION_BITS_DEPLOYMENTS
 };
@@ -100,6 +101,7 @@ struct Params {
     int hammerGestationBlocks;             // The number of blocks for a new hammer to ready
     int hammerLifespanBlocks;              // The number of blocks a hammer lives for after maturation
     uint256 powLimitForge;               // Highest (easiest) hammer hash target
+    uint256 powLimitForge2;  
     uint32_t forgeNonceMarker;           // Nonce marker for forgemined blocks
     int minForgeCheckBlock;              // Don't bother checking below this height for Forge blocks (not used for consensus/validation checks, just efficiency when looking for potential BCTs)
     int forgeTargetAdjustAggression;     // Snap speed for hammer hash target adjustment EMA
@@ -110,13 +112,15 @@ struct Params {
    // Thor: Forge 1.1-related consensus fields
     int minK;                           // Minimum chainwork scale for Forge blocks (see Forge whitepaper section 5)
     int maxK;                           // Maximum chainwork scale for Forge blocks (see Forge whitepaper section 5)
+    int minK2;                           // Minimum chainwork scale for Forge blocks (see Forge whitepaper section 5)
+    int maxK2;                           // Maximum chainwork scale for Forge blocks (see Forge whitepaper section 5)
     double maxForgeDiff;                 // Forge difficulty at which max chainwork bonus is awarded
     int maxKPow;                        // Maximum chainwork scale for PoW blocks
     double powSplit1;                   // Below this Forge difficulty threshold, PoW block chainwork bonus is halved
     double powSplit2;                   // Below this Forge difficulty threshold, PoW block chainwork bonus is halved again
     int maxConsecutiveForgeBlocks;       // Maximum hive blocks that can occur consecutively before a PoW block is required
     int forgeDifficultyWindow;           // How many blocks the SMA averages over in hive difficulty adjust
-
+    int forgeDifficultyWindow2; 
 };
 } // namespace Consensus
 

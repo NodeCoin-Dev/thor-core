@@ -161,7 +161,7 @@ arith_uint256 GetBlockProof(const CBlockIndex& block)
 
 
         // Forge 1.1: Enable bonus chainwork for Forge blocks
-        if (IsForge11Enabled(&block, consensusParams)) {
+        if ((IsForge11Enabled(&block, consensusParams)) && (!IsForge12Enabled(&block, consensusParams))) {
              if (verbose) {
             		LogPrintf("**** FORGE-1.1: ENABLING BONUS CHAINWORK ON FORGE BLOCK %s\n", block.GetBlockHash().ToString());
             		LogPrintf("**** Initial block chainwork = %s\n", bnTargetScaled.ToString());
@@ -176,8 +176,20 @@ arith_uint256 GetBlockProof(const CBlockIndex& block)
 		    LogPrintf("**** Final scaled chainwork =  %s\n", bnTargetScaled.ToString());
 	    }
         }
+
+	// Forge 1.2: Enable bonus chainwork for Forge blocks
+        if (IsForge12Enabled(&block, consensusParams)) {
+          
+            double forgeDiff = GetDifficulty(&block, true);
+          
+            unsigned int k = floor(std::min(forgeDiff/consensusParams.maxForgeDiff, 1.0) * (consensusParams.maxK2 - consensusParams.minK2) + consensusParams.minK2);
+
+            bnTargetScaled *= k;
+
+        }
+
     // Forge 1.1: Enable bonus chainwork for PoW blocks
-    } else if (IsForge11Enabled(&block, consensusParams)) {
+    } else if ((IsForge11Enabled(&block, consensusParams)) && (!IsForge12Enabled(&block, consensusParams))) {
 	if (verbose) {
         	LogPrintf("**** FORGE-1.1: CHECKING FOR BONUS CHAINWORK ON POW BLOCK %s\n", block.GetBlockHash().ToString());
         	LogPrintf("**** Initial block chainwork = %s\n", bnTargetScaled.ToString());
@@ -217,6 +229,35 @@ arith_uint256 GetBlockProof(const CBlockIndex& block)
         	LogPrintf("**** k = %d\n", k);
         	LogPrintf("**** Final scaled chainwork =  %s\n", bnTargetScaled.ToString());
 	}
+
+    } else if (IsForge12Enabled(&block, consensusParams)) {
+
+        CBlockIndex *currBlock = block.pprev;
+        int blocksSinceForge;
+        double lastForgeDifficulty = 0;
+
+        for (blocksSinceForge = 0; blocksSinceForge < consensusParams.maxKPow; blocksSinceForge++) {
+            if (currBlock->GetBlockHeader().IsForgeMined(consensusParams)) {
+                lastForgeDifficulty = GetDifficulty(currBlock, true);
+
+                break;
+            }
+
+            assert(currBlock->pprev);
+            currBlock = currBlock->pprev;
+        }
+
+        unsigned int k = consensusParams.maxKPow - blocksSinceForge;
+        if (lastForgeDifficulty < consensusParams.powSplit1)
+            k = k >> 1;
+        if (lastForgeDifficulty < consensusParams.powSplit2)
+            k = k >> 1;
+
+        if (k < 1)
+            k = 1;
+
+        bnTargetScaled *= k;
+
     }
 
     return bnTargetScaled;

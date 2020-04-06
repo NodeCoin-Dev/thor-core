@@ -273,14 +273,53 @@ unsigned int GetNextForge11WorkRequired(const CBlockIndex* pindexLast, const Con
     return hammerHashTarget.GetCompact();
 }
 
+// LitecoinCash: Forge 1.1: SMA Forge Difficulty Adjust
+unsigned int GetNextForge12WorkRequired(const CBlockIndex* pindexLast, const Consensus::Params& params) {
+    const arith_uint256 bnPowLimit = UintToArith256(params.powLimitForge2);
+
+    arith_uint256 hammerHashTarget = 0;
+    int forgeBlockCount = 0;
+    int totalBlockCount = 0;
+
+    // Step back till we have found 24 hive blocks, or we ran out...
+    while (forgeBlockCount < params.forgeDifficultyWindow2 && pindexLast->pprev && pindexLast->nHeight >= params.minForgeCheckBlock) {
+        if (pindexLast->GetBlockHeader().IsForgeMined(params)) {
+            hammerHashTarget += arith_uint256().SetCompact(pindexLast->nBits);
+            forgeBlockCount++;
+        }
+	totalBlockCount++;
+        pindexLast = pindexLast->pprev;
+    }
+
+    if (forgeBlockCount == 0) {
+        LogPrintf("GetNextForge11WorkRequired: No previous forge blocks found.\n");
+        return bnPowLimit.GetCompact();
+    }
+
+    hammerHashTarget /= forgeBlockCount;    // Average the hammer hash targets in window
+
+    // Retarget
+    hammerHashTarget *= forgeBlockCount;
+    hammerHashTarget /= forgeBlockCount;
+
+    if (hammerHashTarget > bnPowLimit)
+        hammerHashTarget = bnPowLimit;
+
+    return hammerHashTarget.GetCompact();
+}
+
 // Thor: Forge: Get the current Hammer Hash Target
 unsigned int GetNextForgeWorkRequired(const CBlockIndex* pindexLast, const Consensus::Params& params) {
    // LitecoinCash: Hive 1.1: Use SMA diff adjust
-    if (IsForge11Enabled(pindexLast, params))
+    if ((IsForge11Enabled(pindexLast, params)) && (!IsForge12Enabled(pindexLast, params)))
         return GetNextForge11WorkRequired(pindexLast, params);
+
+    if ((IsForge11Enabled(pindexLast, params)) && (IsForge12Enabled(pindexLast, params)))
+	return GetNextForge12WorkRequired(pindexLast, params);
 
 
     const arith_uint256 bnPowLimit = UintToArith256(params.powLimitForge);
+    const arith_uint256 bnPowLimit2 = UintToArith256(params.powLimitForge2);
     const arith_uint256 bnImpossible = 0;
     arith_uint256 hammerHashTarget;
 
@@ -292,7 +331,10 @@ unsigned int GetNextForgeWorkRequired(const CBlockIndex* pindexLast, const Conse
         if (!pindexLast->pprev || pindexLast->nHeight < params.minForgeCheckBlock) {   // Ran out of blocks without finding a Forge block? Return min target
             LogPrintf("GetNextForgeWorkRequired: No forgemined blocks found in history\n");
             //LogPrintf("GetNextForgeWorkRequired: This target= %s\n", bnPowLimit.ToString());
-            return bnPowLimit.GetCompact();
+            if (IsForge12Enabled(pindexLast, params))
+            	return bnPowLimit2.GetCompact();
+	    else
+		return bnPowLimit.GetCompact();
         }
 
         block = pindexLast->GetBlockHeader();
@@ -317,10 +359,12 @@ unsigned int GetNextForgeWorkRequired(const CBlockIndex* pindexLast, const Conse
 	hammerHashTarget /= (interval + 1) * params.forgeBlockSpacingTarget;
 
 	// Clamp to min difficulty
-	if (hammerHashTarget > bnPowLimit)
+	if ((hammerHashTarget > bnPowLimit2) && (IsForge12Enabled(pindexLast, params)))
+		hammerHashTarget = bnPowLimit2;
+	if ((hammerHashTarget > bnPowLimit2) && (!IsForge12Enabled(pindexLast, params)))
 		hammerHashTarget = bnPowLimit;
 
-    LogPrintf("GetNextForgeWorkRequired: This target= %s\n", hammerHashTarget.ToString());
+    //LogPrintf("GetNextForgeWorkRequired: This target= %s\n", hammerHashTarget.ToString());
 
     return hammerHashTarget.GetCompact();
 }

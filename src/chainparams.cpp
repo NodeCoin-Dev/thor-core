@@ -106,6 +106,11 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_FORGE_1_1].nStartTime = 1585901581;  // lala
         consensus.vDeployments[Consensus::DEPLOYMENT_FORGE_1_1].nTimeout = 1617437580;  // lala + 1 an
 
+        // Thor: Forge 1.2: Deployment
+        consensus.vDeployments[Consensus::DEPLOYMENT_FORGE_1_2].bit = 10;
+        consensus.vDeployments[Consensus::DEPLOYMENT_FORGE_1_2].nStartTime = 1586476800; // April 10th 2020
+        consensus.vDeployments[Consensus::DEPLOYMENT_FORGE_1_2].nTimeout = 1618012800;
+
         // Thor fields
         consensus.powForkTime = 1585891944;
         consensus.lastScryptBlock = 0;
@@ -123,6 +128,7 @@ public:
         consensus.hammerGestationBlocks = 48*24;               // The number of blocks for a new hammer to ready
         consensus.hammerLifespanBlocks = 48*24*14;             // The number of blocks a hammer lives for after maturation
         consensus.powLimitForge = uint256S("0fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");  // Highest (easiest) hammer hash target
+        consensus.powLimitForge2 = uint256S("7ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         consensus.minForgeCheckBlock = 125;
         consensus.forgeTargetAdjustAggression = 30;          // Snap speed for hammer hash target adjustment EMA
         consensus.forgeBlockSpacingTarget = 2;               // Target Forge block frequency (1 out of this many blocks should be Forgemined)
@@ -139,6 +145,16 @@ public:
         consensus.powSplit2 = 0.0025;                       // Below this Forge difficulty threshold, PoW block chainwork bonus is halved again
         consensus.maxConsecutiveForgeBlocks = 2;             // Maximum hive blocks that can occur consecutively before a PoW block is required
         consensus.forgeDifficultyWindow = 36;                // How many blocks the SMA averages over in hive difficulty adjust
+
+
+	// Thor: Forge 1.2-related consensus fields
+        consensus.minK2 = 1;
+        consensus.maxK2 = 7; 
+        consensus.forgeDifficultyWindow2 = 24;
+
+
+
+
 
         // The best chain should have at least this much work.
         consensus.nMinimumChainWork = uint256S("0x0000000000000000000000000000000000000000000000000000000000000000");  // Thor new blockchain

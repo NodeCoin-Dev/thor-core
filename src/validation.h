@@ -414,6 +414,9 @@ bool IsForgeEnabled(const CBlockIndex* pindexPrev, const Consensus::Params& para
 // Thor: Forge: Check if Forge 1.1 is activated at given point
 bool IsForge11Enabled(const CBlockIndex* pindexPrev, const Consensus::Params& params);
 
+// Thor: Forge: Check if Forge 1.2 is activated at given point
+bool IsForge12Enabled(const CBlockIndex* pindexPrev, const Consensus::Params& params);
+
 // Thor: Forge: Get the well-rooted deterministic random string (see whitepaper section 4.1)
 std::string GetDeterministicRandString(const CBlockIndex* pindexPrev);
 
