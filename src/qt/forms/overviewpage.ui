@@ -283,7 +283,7 @@ background-position:center;</string>
              <item row="3" column="0">
               <widget class="QLabel" name="labelCreatedText">
                <property name="text">
-                <string>Created:</string>
+                <string>Immature:</string>
                </property>
               </widget>
              </item>
