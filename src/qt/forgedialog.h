@@ -67,8 +67,8 @@ public:
 
 public Q_SLOTS:
     void updateData(bool forceGlobalSummaryUpdate = false);
-    void setBalance(const CAmount& balance, const CAmount& unconfirmedBalance, const CAmount& createdBalance,
-                    const CAmount& watchOnlyBalance, const CAmount& watchUnconfBalance, const CAmount& watchCreatedBalance);
+    void setBalance(const CAmount& balance, const CAmount& unconfirmedBalance, const CAmount& immatureBalance,
+                    const CAmount& watchOnlyBalance, const CAmount& watchUnconfBalance, const CAmount& watchImmatureBalance);
     void setEncryptionStatus(int status);
 
 Q_SIGNALS:

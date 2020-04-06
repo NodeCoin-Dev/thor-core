@@ -387,7 +387,7 @@ BOOST_FIXTURE_TEST_CASE(rescan, TestChain100Setup)
         WalletRescanReserver reserver(&wallet);
         reserver.reserve();
         BOOST_CHECK_EQUAL(nullBlock, wallet.ScanForWalletTransactions(oldTip, nullptr, reserver));
-        BOOST_CHECK_EQUAL(wallet.GetCreatedBalance(), 100 * COIN * COIN_SCALE);
+        BOOST_CHECK_EQUAL(wallet.GetImmatureBalance(), 100 * COIN * COIN_SCALE);
     }
 
     // Prune the older block file.
@@ -402,7 +402,7 @@ BOOST_FIXTURE_TEST_CASE(rescan, TestChain100Setup)
         WalletRescanReserver reserver(&wallet);
         reserver.reserve();
         BOOST_CHECK_EQUAL(oldTip, wallet.ScanForWalletTransactions(oldTip, nullptr, reserver));
-        BOOST_CHECK_EQUAL(wallet.GetCreatedBalance(), 50 * COIN * COIN_SCALE);
+        BOOST_CHECK_EQUAL(wallet.GetImmatureBalance(), 50 * COIN * COIN_SCALE);
     }
 
     // Verify importmulti RPC returns failure for a key whose creation time is

@@ -85,7 +85,7 @@ void ForgeDialog::setModel(WalletModel *_model) {
         connect(_model->getOptionsModel(), SIGNAL(displayUnitChanged(int)), this, SLOT(updateDisplayUnit()));
         updateDisplayUnit();
 
-        setBalance(_model->getBalance(), _model->getUnconfirmedBalance(), _model->getCreatedBalance(), _model->getWatchBalance(), _model->getWatchUnconfirmedBalance(), _model->getWatchCreatedBalance());
+        setBalance(_model->getBalance(), _model->getUnconfirmedBalance(), _model->getImmatureBalance(), _model->getWatchBalance(), _model->getWatchUnconfirmedBalance(), _model->getWatchImmatureBalance());
         connect(_model, SIGNAL(balanceChanged(CAmount,CAmount,CAmount,CAmount,CAmount,CAmount)), this, SLOT(setBalance(CAmount,CAmount,CAmount,CAmount,CAmount,CAmount)));
         
         if (_model->getEncryptionStatus() != WalletModel::Locked)
@@ -121,7 +121,7 @@ ForgeDialog::~ForgeDialog() {
     delete ui;
 }
 
-void ForgeDialog::setBalance(const CAmount& balance, const CAmount& unconfirmedBalance, const CAmount& createdBalance, const CAmount& watchOnlyBalance, const CAmount& watchUnconfBalance, const CAmount& watchCreatedBalance) {
+void ForgeDialog::setBalance(const CAmount& balance, const CAmount& unconfirmedBalance, const CAmount& immatureBalance, const CAmount& watchOnlyBalance, const CAmount& watchUnconfBalance, const CAmount& watchImmatureBalance) {
     currentBalance = balance;
     setAmountField(ui->currentBalance, currentBalance);
 }

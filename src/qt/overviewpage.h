@@ -38,8 +38,8 @@ public:
     void showOutOfSyncWarning(bool fShow);
 
 public Q_SLOTS:
-    void setBalance(const CAmount& balance, const CAmount& unconfirmedBalance, const CAmount& createdBalance,
-                    const CAmount& watchOnlyBalance, const CAmount& watchUnconfBalance, const CAmount& watchCreatedBalance);
+    void setBalance(const CAmount& balance, const CAmount& unconfirmedBalance, const CAmount& immatureBalance,
+                    const CAmount& watchOnlyBalance, const CAmount& watchUnconfBalance, const CAmount& watchImmatureBalance);
 
 Q_SIGNALS:
     void transactionClicked(const QModelIndex &index);
@@ -52,10 +52,10 @@ private:
     WalletModel *walletModel;
     CAmount currentBalance;
     CAmount currentUnconfirmedBalance;
-    CAmount currentCreatedBalance;
+    CAmount currentImmatureBalance;
     CAmount currentWatchOnlyBalance;
     CAmount currentWatchUnconfBalance;
-    CAmount currentWatchCreatedBalance;
+    CAmount currentWatchImmatureBalance;
     CAmount cost, rewardsPaid, profit;          // Thor: Forge
 
     TxViewDelegate *txdelegate;

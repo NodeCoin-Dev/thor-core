@@ -2081,7 +2081,7 @@ CAmount CWallet::GetUnconfirmedBalance() const
     return nTotal;
 }
 
-CAmount CWallet::GetCreatedBalance() const
+CAmount CWallet::GetImmatureBalance() const
 {
     CAmount nTotal = 0;
     {
