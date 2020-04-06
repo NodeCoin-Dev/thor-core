@@ -27,7 +27,13 @@ const struct VBDeploymentInfo VersionBitsDeploymentInfo[Consensus::MAX_VERSION_B
     {
         /*.name =*/ "forge_1_1",
         /*.gbt_force =*/ true,
+    },
+
+    {
+        /*.name =*/ "forge_1_2",
+        /*.gbt_force =*/ true,
     }
+
 };
 
 ThresholdState AbstractThresholdConditionChecker::GetStateFor(const CBlockIndex* pindexPrev, const Consensus::Params& params, ThresholdConditionCache& cache) const
