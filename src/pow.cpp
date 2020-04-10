@@ -348,10 +348,10 @@ unsigned int GetNextForge13WorkRequired(const CBlockIndex* pindexLast, const Con
 // Thor: Forge: Get the current Hammer Hash Target
 unsigned int GetNextForgeWorkRequired(const CBlockIndex* pindexLast, const Consensus::Params& params) {
    // LitecoinCash: Hive 1.1: Use SMA diff adjust
-    if ((IsForge11Enabled(pindexLast, params)) && (!IsForge12Enabled(pindexLast, params)) && (!IsForge13Enabled(pindexLast, params))) 
+    if ((IsForge11Enabled(pindexLast, params)) && (!IsForge12Enabled(pindexLast, params)) && (!IsForge13Enabled(pindexLast->nHeight))) 
         return GetNextForge11WorkRequired(pindexLast, params);
 
-    if ((IsForge11Enabled(pindexLast, params)) && (IsForge12Enabled(pindexLast, params)) && (!IsForge13Enabled(pindexLast, params)))
+    if ((IsForge11Enabled(pindexLast, params)) && (IsForge12Enabled(pindexLast, params)) && (!IsForge13Enabled(pindexLast->nHeight)))
 	return GetNextForge12WorkRequired(pindexLast, params);
 
     if (IsForge13Enabled(pindexLast->nHeight))
