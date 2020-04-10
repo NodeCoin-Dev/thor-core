@@ -3104,7 +3104,7 @@ bool IsForge12Enabled(const CBlockIndex* pindexPrev, const Consensus::Params& pa
 }
 
 // Thor: Forge: Check if Hive 1.3 is activated at given point
-bool IsHive13Enabled(int nHeight)
+bool IsForge13Enabled(int nHeight)
 {
     return (nHeight >= nTypoFork);
 }
