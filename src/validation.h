@@ -182,6 +182,8 @@ extern CAmount maxTxFee;
 extern int64_t nMaxTipAge;
 extern bool fEnableReplacement;
 
+extern const int nTypoFork;
+
 /** Block hash whose ancestors we will assume to have valid scripts without checking them. */
 extern uint256 hashAssumeValid;
 
@@ -416,6 +418,8 @@ bool IsForge11Enabled(const CBlockIndex* pindexPrev, const Consensus::Params& pa
 
 // Thor: Forge: Check if Forge 1.2 is activated at given point
 bool IsForge12Enabled(const CBlockIndex* pindexPrev, const Consensus::Params& params);
+
+bool IsHive13Enabled(int nHeight);
 
 // Thor: Forge: Get the well-rooted deterministic random string (see whitepaper section 4.1)
 std::string GetDeterministicRandString(const CBlockIndex* pindexPrev);

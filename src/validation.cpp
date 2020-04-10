@@ -221,6 +221,7 @@ size_t nCoinCacheUsage = 5000 * 300;
 uint64_t nPruneTarget = 0;
 int64_t nMaxTipAge = DEFAULT_MAX_TIP_AGE;
 bool fEnableReplacement = DEFAULT_ENABLE_REPLACEMENT;
+const int nTypoFork = 144000;
 
 uint256 hashAssumeValid;
 arith_uint256 nMinimumChainWork;
@@ -3100,6 +3101,12 @@ bool IsForge12Enabled(const CBlockIndex* pindexPrev, const Consensus::Params& pa
 {
     LOCK(cs_main);
     return (VersionBitsState(pindexPrev, params, Consensus::DEPLOYMENT_FORGE_1_2, versionbitscache) == THRESHOLD_ACTIVE);
+}
+
+// Thor: Forge: Check if Hive 1.3 is activated at given point
+bool IsHive13Enabled(int nHeight)
+{
+    return (nHeight >= nTypoFork);
 }
 
 // Thor: Forge: Get the well-rooted deterministic random string (see whitepaper section 4.1)

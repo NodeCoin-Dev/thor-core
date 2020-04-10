@@ -308,14 +308,54 @@ unsigned int GetNextForge12WorkRequired(const CBlockIndex* pindexLast, const Con
     return hammerHashTarget.GetCompact();
 }
 
+unsigned int GetNextForge13WorkRequired(const CBlockIndex* pindexLast, const Consensus::Params& params) {
+    const arith_uint256 bnPowLimit = UintToArith256(params.powLimitForge2);
+
+    arith_uint256 hammerHashTarget = 0;
+    int forgeBlockCount = 0;
+    int targetBlockCount = params.forgeDifficultyWindow2 / params.forgeBlockSpacingTarget;
+
+    CBlockHeader block;
+    for(int i = 0; i < params.forgeDifficultyWindow2; i++) {
+        if (!pindexLast->pprev || pindexLast->nHeight < params.minForgeCheckBlock) {   // Not enough sampling window
+            LogPrintf("GetNextForge13WorkRequired: Not enough blocks in sampling window.\n");
+            return bnPowLimit.GetCompact();
+        }
+
+        block = pindexLast->GetBlockHeader();
+        if (block.IsForgeMined(params)) {
+            hammerHashTarget += arith_uint256().SetCompact(pindexLast->nBits);
+            forgeBlockCount++;
+        }
+        pindexLast = pindexLast->pprev;
+    }
+
+    if (forgeBlockCount == 0)
+        return bnPowLimit.GetCompact();
+
+    hammerHashTarget /= forgeBlockCount;    // Average the hammer hash targets in window
+
+    // Retarget
+    hammerHashTarget *= targetBlockCount;
+    hammerHashTarget /= forgeBlockCount;
+
+    if (hammerHashTarget > bnPowLimit)
+        hammerHashTarget = bnPowLimit;
+
+    return hammerHashTarget.GetCompact();
+}
+
 // Thor: Forge: Get the current Hammer Hash Target
 unsigned int GetNextForgeWorkRequired(const CBlockIndex* pindexLast, const Consensus::Params& params) {
    // LitecoinCash: Hive 1.1: Use SMA diff adjust
-    if ((IsForge11Enabled(pindexLast, params)) && (!IsForge12Enabled(pindexLast, params)))
+    if ((IsForge11Enabled(pindexLast, params)) && (!IsForge12Enabled(pindexLast, params)) $$ (!IsForge13Enabled(pindexLast, params))) 
         return GetNextForge11WorkRequired(pindexLast, params);
 
-    if ((IsForge11Enabled(pindexLast, params)) && (IsForge12Enabled(pindexLast, params)))
+    if ((IsForge11Enabled(pindexLast, params)) && (IsForge12Enabled(pindexLast, params)) $$ (!IsForge13Enabled(pindexLast, params)))
 	return GetNextForge12WorkRequired(pindexLast, params);
+
+    if (IsForge13Enabled(pindexLast->nHeight))
+        return GetNextForge13WorkRequired(pindexLast, params);
 
 
     const arith_uint256 bnPowLimit = UintToArith256(params.powLimitForge);
@@ -477,7 +517,7 @@ bool GetNetworkForgeInfo(int& createdHammers, int& createdBCTs, int& readyHammer
 bool CheckForgeProof(const CBlock* pblock, const Consensus::Params& consensusParams) {
     bool verbose = LogAcceptCategory(BCLog::FORGE);
 
-    if (verbose)
+  //  if (verbose)
         LogPrintf("********************* Forge: CheckForgeProof *********************\n");
 
     // Get height (a CBlockIndex isn't always available when this func is called, eg in reads from disk)
@@ -492,7 +532,7 @@ bool CheckForgeProof(const CBlock* pblock, const Consensus::Params& consensusPar
         LogPrintf("CheckForgeProof: Couldn't get previous block's CBlockIndex!\n");
         return false;
     }
-    if (verbose)
+  //  if (verbose)
         LogPrintf("CheckForgeProof: nHeight             = %i\n", blockHeight);
 
     // Check forge is enabled on network
@@ -558,36 +598,36 @@ bool CheckForgeProof(const CBlock* pblock, const Consensus::Params& consensusPar
 
     // Grab the hammer nonce (bytes 3-6; byte 2 has value 04 as a size marker for this field)
     uint32_t hammerNonce = ReadLE32(&txCoinbase->vout[0].scriptPubKey[3]);
-    if (verbose)
+   // if (verbose)
         LogPrintf("CheckForgeProof: hammerNonce            = %i\n", hammerNonce);
 
     // Grab the bct height (bytes 8-11; byte 7 has value 04 as a size marker for this field)
     uint32_t bctClaimedHeight = ReadLE32(&txCoinbase->vout[0].scriptPubKey[8]);
-    if (verbose)
+  //  if (verbose)
         LogPrintf("CheckForgeProof: bctHeight           = %i\n", bctClaimedHeight);
 
     // Get community contrib flag (byte 12)
     bool communityContrib = txCoinbase->vout[0].scriptPubKey[12] == OP_TRUE;
-    if (verbose)
+ //   if (verbose)
         LogPrintf("CheckForgeProof: communityContrib    = %s\n", communityContrib ? "true" : "false");
 
     // Grab the txid (bytes 14-78; byte 13 has val 64 as size marker)
     std::vector<unsigned char> txid(&txCoinbase->vout[0].scriptPubKey[14], &txCoinbase->vout[0].scriptPubKey[14 + 64]);
     std::string txidStr = std::string(txid.begin(), txid.end());
-    if (verbose)
+  //  if (verbose)
         LogPrintf("CheckForgeProof: bctTxId             = %s\n", txidStr);
 
     // Check hammer hash against target
     std::string deterministicRandString = GetDeterministicRandString(pindexPrev);
-    if (verbose)
+  //  if (verbose)
         LogPrintf("CheckForgeProof: detRandString       = %s\n", deterministicRandString);
     arith_uint256 hammerHashTarget;
     hammerHashTarget.SetCompact(GetNextForgeWorkRequired(pindexPrev, consensusParams));
-    if (verbose)
+  //  if (verbose)
         LogPrintf("CheckForgeProof: hammerHashTarget       = %s\n", hammerHashTarget.ToString());
     std::string hashHex = (CHashWriter(SER_GETHASH, 0) << deterministicRandString << txidStr << hammerNonce).GetHash().GetHex();
     arith_uint256 hammerHash = arith_uint256(hashHex);
-    if (verbose)
+ //   if (verbose)
         LogPrintf("CheckForgeProof: hammerHash             = %s\n", hashHex);
     if (hammerHash >= hammerHashTarget) {
         LogPrintf("CheckForgeProof: Hammer does not meet hash target!\n");
@@ -596,7 +636,7 @@ bool CheckForgeProof(const CBlock* pblock, const Consensus::Params& consensusPar
 
     // Grab the message sig (bytes 79-end; byte 78 is size)
     std::vector<unsigned char> messageSig(&txCoinbase->vout[0].scriptPubKey[79], &txCoinbase->vout[0].scriptPubKey[79 + 65]);
-    if (verbose)
+  //  if (verbose)
         LogPrintf("CheckForgeProof: messageSig          = %s\n", HexStr(&messageSig[0], &messageSig[messageSig.size()]));
     
     // Grab the gold address from the gold vout
@@ -609,7 +649,7 @@ bool CheckForgeProof(const CBlock* pblock, const Consensus::Params& consensusPar
         LogPrintf("CheckForgeProof: Gold address is invalid\n");
         return false;
     }
-    if (verbose)
+  //  if (verbose)
         LogPrintf("CheckForgeProof: goldAddress        = %s\n", EncodeDestination(goldDestination));
 
     // Verify the message sig
@@ -646,13 +686,13 @@ bool CheckForgeProof(const CBlock* pblock, const Consensus::Params& consensusPar
         CBlockIndex foundAt;
 
         if (pcoinsTip && pcoinsTip->GetCoin(outHammerCreation, coin)) {        // First try the UTXO set (this pathway will hit on incoming blocks)
-            if (verbose)
+         //   if (verbose)
                 LogPrintf("CheckForgeProof: Using UTXO set for outHammerCreation\n");
             bctValue = coin.out.nValue;
             bctScriptPubKey = coin.out.scriptPubKey;
             bctFoundHeight = coin.nHeight;
         } else {                                                            // UTXO set isn't available when eg reindexing, so drill into block db (not too bad, since Alice put her BCT height in the coinbase tx)
-            if (verbose)
+          //  if (verbose)
                 LogPrintf("! CheckForgeProof: Warn: Using deep drill for outHammerCreation\n");
             if (!GetTxByHashAndHeight(uint256S(txidStr), bctClaimedHeight, bct, foundAt, pindexPrev, consensusParams)) {
                 LogPrintf("CheckForgeProof: Couldn't locate indicated BCT\n");
@@ -670,7 +710,7 @@ bool CheckForgeProof(const CBlock* pblock, const Consensus::Params& consensusPar
 
             if(bct == nullptr) {                                                                // If we dont have a ref to the BCT
                 if (pcoinsTip && pcoinsTip->GetCoin(outCommFund, coin)) {                       // First try UTXO set
-                    if (verbose)
+                //    if (verbose)
                         LogPrintf("CheckForgeProof: Using UTXO set for outCommFund\n");
                     if (coin.out.scriptPubKey != scriptPubKeyCF) {                              // If we find it, validate the scriptPubKey and store amount
                         LogPrintf("CheckForgeProof: Community contrib was indicated but not found\n");
@@ -678,7 +718,7 @@ bool CheckForgeProof(const CBlock* pblock, const Consensus::Params& consensusPar
                     }
                     donationAmount = coin.out.nValue;
                 } else {                                                                        // Fallback if we couldn't use UTXO set
-                    if (verbose)
+                 //   if (verbose)
                         LogPrintf("! CheckForgeProof: Warn: Using deep drill for outCommFund\n");
                     if (!GetTxByHashAndHeight(uint256S(txidStr), bctClaimedHeight, bct, foundAt, pindexPrev, consensusParams)) {
                         LogPrintf("CheckForgeProof: Couldn't locate indicated BCT\n");           // Still couldn't find it
@@ -753,11 +793,11 @@ bool CheckForgeProof(const CBlock* pblock, const Consensus::Params& consensusPar
         return false;
     }
     unsigned int hammerCount = bctValue / hammerCost;
-    if (verbose) {
+  //  if (verbose) {
         LogPrintf("CheckForgeProof: bctValue            = %i\n", bctValue);
         LogPrintf("CheckForgeProof: hammerCost             = %i\n", hammerCost);
         LogPrintf("CheckForgeProof: hammerCount            = %i\n", hammerCount);
-    }
+  //  }
     
     // Check enough hammers were bought to include claimed hammerNonce
     if (hammerNonce >= hammerCount) {
@@ -765,7 +805,7 @@ bool CheckForgeProof(const CBlock* pblock, const Consensus::Params& consensusPar
         return false;
     }
     
-    if (verbose)
+  //  if (verbose)
     	LogPrintf("CheckForgeProof: Pass at %i%s\n", blockHeight, deepDrill ? " (used deepdrill)" : "");
 
     return true;

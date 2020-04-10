@@ -904,5 +904,9 @@ bool BusyHammers(const Consensus::Params& consensusParams, int height) {
     }
 
     LogPrintf("BusyHammers: ** Block mined\n");
+    LogPrintf("                           \n");
+    LogPrintf("                           \n");
+    LogPrintf("                           \n");
+    LogPrintf("                           \n");
     return true;
 }
