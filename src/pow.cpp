@@ -517,7 +517,7 @@ bool GetNetworkForgeInfo(int& createdHammers, int& createdBCTs, int& readyHammer
 bool CheckForgeProof(const CBlock* pblock, const Consensus::Params& consensusParams) {
     bool verbose = LogAcceptCategory(BCLog::FORGE);
 
-  //  if (verbose)
+    if (verbose)
         LogPrintf("********************* Forge: CheckForgeProof *********************\n");
 
     // Get height (a CBlockIndex isn't always available when this func is called, eg in reads from disk)
@@ -532,7 +532,7 @@ bool CheckForgeProof(const CBlock* pblock, const Consensus::Params& consensusPar
         LogPrintf("CheckForgeProof: Couldn't get previous block's CBlockIndex!\n");
         return false;
     }
-  //  if (verbose)
+    if (verbose)
         LogPrintf("CheckForgeProof: nHeight             = %i\n", blockHeight);
 
     // Check forge is enabled on network
@@ -598,36 +598,36 @@ bool CheckForgeProof(const CBlock* pblock, const Consensus::Params& consensusPar
 
     // Grab the hammer nonce (bytes 3-6; byte 2 has value 04 as a size marker for this field)
     uint32_t hammerNonce = ReadLE32(&txCoinbase->vout[0].scriptPubKey[3]);
-   // if (verbose)
+    if (verbose)
         LogPrintf("CheckForgeProof: hammerNonce            = %i\n", hammerNonce);
 
     // Grab the bct height (bytes 8-11; byte 7 has value 04 as a size marker for this field)
     uint32_t bctClaimedHeight = ReadLE32(&txCoinbase->vout[0].scriptPubKey[8]);
-  //  if (verbose)
+    if (verbose)
         LogPrintf("CheckForgeProof: bctHeight           = %i\n", bctClaimedHeight);
 
     // Get community contrib flag (byte 12)
     bool communityContrib = txCoinbase->vout[0].scriptPubKey[12] == OP_TRUE;
- //   if (verbose)
+    if (verbose)
         LogPrintf("CheckForgeProof: communityContrib    = %s\n", communityContrib ? "true" : "false");
 
     // Grab the txid (bytes 14-78; byte 13 has val 64 as size marker)
     std::vector<unsigned char> txid(&txCoinbase->vout[0].scriptPubKey[14], &txCoinbase->vout[0].scriptPubKey[14 + 64]);
     std::string txidStr = std::string(txid.begin(), txid.end());
-  //  if (verbose)
+    if (verbose)
         LogPrintf("CheckForgeProof: bctTxId             = %s\n", txidStr);
 
     // Check hammer hash against target
     std::string deterministicRandString = GetDeterministicRandString(pindexPrev);
-  //  if (verbose)
+    if (verbose)
         LogPrintf("CheckForgeProof: detRandString       = %s\n", deterministicRandString);
     arith_uint256 hammerHashTarget;
     hammerHashTarget.SetCompact(GetNextForgeWorkRequired(pindexPrev, consensusParams));
-  //  if (verbose)
+    if (verbose)
         LogPrintf("CheckForgeProof: hammerHashTarget       = %s\n", hammerHashTarget.ToString());
     std::string hashHex = (CHashWriter(SER_GETHASH, 0) << deterministicRandString << txidStr << hammerNonce).GetHash().GetHex();
     arith_uint256 hammerHash = arith_uint256(hashHex);
- //   if (verbose)
+    if (verbose)
         LogPrintf("CheckForgeProof: hammerHash             = %s\n", hashHex);
     if (hammerHash >= hammerHashTarget) {
         LogPrintf("CheckForgeProof: Hammer does not meet hash target!\n");
@@ -636,7 +636,7 @@ bool CheckForgeProof(const CBlock* pblock, const Consensus::Params& consensusPar
 
     // Grab the message sig (bytes 79-end; byte 78 is size)
     std::vector<unsigned char> messageSig(&txCoinbase->vout[0].scriptPubKey[79], &txCoinbase->vout[0].scriptPubKey[79 + 65]);
-  //  if (verbose)
+    if (verbose)
         LogPrintf("CheckForgeProof: messageSig          = %s\n", HexStr(&messageSig[0], &messageSig[messageSig.size()]));
     
     // Grab the gold address from the gold vout
@@ -649,7 +649,7 @@ bool CheckForgeProof(const CBlock* pblock, const Consensus::Params& consensusPar
         LogPrintf("CheckForgeProof: Gold address is invalid\n");
         return false;
     }
-  //  if (verbose)
+    if (verbose)
         LogPrintf("CheckForgeProof: goldAddress        = %s\n", EncodeDestination(goldDestination));
 
     // Verify the message sig
@@ -793,11 +793,11 @@ bool CheckForgeProof(const CBlock* pblock, const Consensus::Params& consensusPar
         return false;
     }
     unsigned int hammerCount = bctValue / hammerCost;
-  //  if (verbose) {
+    if (verbose) {
         LogPrintf("CheckForgeProof: bctValue            = %i\n", bctValue);
         LogPrintf("CheckForgeProof: hammerCost             = %i\n", hammerCost);
         LogPrintf("CheckForgeProof: hammerCount            = %i\n", hammerCount);
-  //  }
+    }
     
     // Check enough hammers were bought to include claimed hammerNonce
     if (hammerNonce >= hammerCount) {
@@ -805,7 +805,7 @@ bool CheckForgeProof(const CBlock* pblock, const Consensus::Params& consensusPar
         return false;
     }
     
-  //  if (verbose)
+    if (verbose)
     	LogPrintf("CheckForgeProof: Pass at %i%s\n", blockHeight, deepDrill ? " (used deepdrill)" : "");
 
     return true;
