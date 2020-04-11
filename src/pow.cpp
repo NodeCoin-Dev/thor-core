@@ -686,13 +686,13 @@ bool CheckForgeProof(const CBlock* pblock, const Consensus::Params& consensusPar
         CBlockIndex foundAt;
 
         if (pcoinsTip && pcoinsTip->GetCoin(outHammerCreation, coin)) {        // First try the UTXO set (this pathway will hit on incoming blocks)
-         //   if (verbose)
+            if (verbose)
                 LogPrintf("CheckForgeProof: Using UTXO set for outHammerCreation\n");
             bctValue = coin.out.nValue;
             bctScriptPubKey = coin.out.scriptPubKey;
             bctFoundHeight = coin.nHeight;
         } else {                                                            // UTXO set isn't available when eg reindexing, so drill into block db (not too bad, since Alice put her BCT height in the coinbase tx)
-          //  if (verbose)
+            if (verbose)
                 LogPrintf("! CheckForgeProof: Warn: Using deep drill for outHammerCreation\n");
             if (!GetTxByHashAndHeight(uint256S(txidStr), bctClaimedHeight, bct, foundAt, pindexPrev, consensusParams)) {
                 LogPrintf("CheckForgeProof: Couldn't locate indicated BCT\n");
@@ -710,7 +710,7 @@ bool CheckForgeProof(const CBlock* pblock, const Consensus::Params& consensusPar
 
             if(bct == nullptr) {                                                                // If we dont have a ref to the BCT
                 if (pcoinsTip && pcoinsTip->GetCoin(outCommFund, coin)) {                       // First try UTXO set
-                //    if (verbose)
+                    if (verbose)
                         LogPrintf("CheckForgeProof: Using UTXO set for outCommFund\n");
                     if (coin.out.scriptPubKey != scriptPubKeyCF) {                              // If we find it, validate the scriptPubKey and store amount
                         LogPrintf("CheckForgeProof: Community contrib was indicated but not found\n");
@@ -718,7 +718,7 @@ bool CheckForgeProof(const CBlock* pblock, const Consensus::Params& consensusPar
                     }
                     donationAmount = coin.out.nValue;
                 } else {                                                                        // Fallback if we couldn't use UTXO set
-                 //   if (verbose)
+                    if (verbose)
                         LogPrintf("! CheckForgeProof: Warn: Using deep drill for outCommFund\n");
                     if (!GetTxByHashAndHeight(uint256S(txidStr), bctClaimedHeight, bct, foundAt, pindexPrev, consensusParams)) {
                         LogPrintf("CheckForgeProof: Couldn't locate indicated BCT\n");           // Still couldn't find it
