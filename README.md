@@ -33,7 +33,7 @@ Characteristics
 
 - Premine : 2 000 000 coins, barely above 2 % of max supply
 
-- Block Reward : 5 Thor ( halved every 8 400 000 blocks, so every 2 years on average )
+- Block Reward : 5 Thor ( halved every 8 400 000 blocks, so every 16 months on average )
 
 - Brand New Blockchain  ( downloading the new blockchain or re indexing it and syncing with the network actually takes less than 1 minute on average with a normal internet speed )
 
