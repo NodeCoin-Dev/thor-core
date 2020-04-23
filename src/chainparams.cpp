@@ -157,10 +157,10 @@ public:
 
 
         // The best chain should have at least this much work.
-        consensus.nMinimumChainWork = uint256S("0x0000000000000000000000000000000000000000000000000000000000000000");  // Thor new blockchain
+        consensus.nMinimumChainWork = uint256S("0x000000000000000000000000000000000000000000000000014832931b7b34dd");  // Thor 373721
 
         // By default assume that the signatures in ancestors of this block are valid.
-        consensus.defaultAssumeValid = uint256S("0xb0c144e2906661f58c9862721fb07f7595b05b42368fef10e4c21468ce4d69d2"); // Thor: Genesis block
+        consensus.defaultAssumeValid = uint256S("0x40690ea59d9170c369f9d76e2b40c354b6eea76704512e8819fdeedf057e29f6"); // Thor: 373721
 
         /**
          * The message start string is designed to be unlikely to occur in normal data.
@@ -202,6 +202,7 @@ public:
         checkpointData = {
             {
                 {  0, uint256S("0xb0c144e2906661f58c9862721fb07f7595b05b42368fef10e4c21468ce4d69d2")},
+                {  373721, uint256S("0x40690ea59d9170c369f9d76e2b40c354b6eea76704512e8819fdeedf057e29f6")},
             }
         };
 

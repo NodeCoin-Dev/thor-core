@@ -2999,6 +2999,20 @@ static bool FindUndoPos(CValidationState &state, int nFile, CDiskBlockPos &pos, 
 
 static bool CheckBlockHeader(const CBlockHeader& block, CValidationState& state, const Consensus::Params& consensusParams, bool fCheckPOW = true)
 {
+
+    // Get prev block index
+    CBlockIndex* pindexPrev = NULL;
+    int nHeight = 0;
+    BlockMap::iterator mi = mapBlockIndex.find(block.hashPrevBlock);
+    if (mi != mapBlockIndex.end()) {
+        pindexPrev = mi->second;
+        nHeight = pindexPrev->nHeight + 1;
+    }
+
+    // Skip headers validation until we're close to chaintip
+      if (nHeight < SKIP_BLOCKHEADER_POW)
+        return true;
+
     // Thor: Forge: Check PoW or Forge work depending on blocktype
     if (fCheckPOW && !block.IsForgeMined(consensusParams)) {
         if (!CheckProofOfWork(block.GetPoWHash(), block.nBits, consensusParams))
